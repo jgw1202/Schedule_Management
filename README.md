@@ -27,15 +27,15 @@
 
 ## SQL
 
-CREATE TABLE scheduler  (
+CREATE TABLE scheduler (
 
-scheduler_id LONG NOT NULL, 
+scheduler_id BIGINT NOT NULL AUTO_INCREMENT,
 
-name VARCHAR NOT NULL,
+name VARCHAR(255) NOT NULL,
 
-password VARCHAR NOT NULL,
+password VARCHAR(255) NOT NULL,
 
-contents VARCHAR NULL,
+contents VARCHAR(255),
 
 created_date DATE NOT NULL,
 
@@ -44,3 +44,4 @@ updated_date DATE NOT NULL,
 PRIMARY KEY (scheduler_id)
 
 );
+
