@@ -13,3 +13,34 @@
 | 일정 수정    | PUT    | /api/scheduler/{id}     | 요청 body  | 수정 정보    | 200 : OK  (정상 수정)     |
 | 일정 삭제    | DELETE | /api/scheduler/{id}     | 요청 param     | -        | 200 : OK     (정상 삭제)  |
 
+## ERD
+
+
+| Key      | Logical | physical     | Domain   | Type    | Allow Null |
+|----------|---------|--------------|----------|---------|-----------|
+| PK       | 아이디     | scheduler_id |   | Long    | N         |
+|  | 이름      | name         |  | VARCHAR | N)        |
+|    | 비밀번호    | password     |  | VARCHAR | N         |
+|     | 할 일     | contents     |  | DATE    | Y        |
+|    | 생성일자    | created_date |  | DATE    | N |
+|    | 수정일자    | updated_date |  | DATE    | N |
+
+## SQL
+
+CREATE TABLE scheduler  (
+
+scheduler_id LONG NOT NULL, 
+
+name VARCHAR NOT NULL,
+
+password VARCHAR NOT NULL,
+
+contents VARCHAR NULL,
+
+created_date DATE NOT NULL,
+
+updated_date DATE NOT NULL,
+
+PRIMARY KEY (scheduler_id)
+
+);
