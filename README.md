@@ -127,7 +127,6 @@
 요청
 ```
  {
-    "id": 1,
     "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
