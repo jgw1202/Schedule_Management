@@ -20,7 +20,7 @@
 요청
 ```
 {
- "user_id" : "1",
+ "userId" : "1",
 
  "title" : "제목",
 
@@ -30,7 +30,12 @@
 응답
 ```
 {
- "scheduler_id" : "1",
+    "id": "1",
+    "userId": "1",
+    "title" : "제목1",
+    "content" : "할 일 1",
+    "createdAt":"2024-10-30",
+    "updatedAt":"2024-10-30"
 }
 ```
 
@@ -43,15 +48,15 @@
 응답
 ```
 "schedulers" :[ {
-    "scheduler_id": "1",
-    "user_id": "1",
+    "id": "1",
+    "userId": "1",
     "title" : "제목1",
     "content" : "할 일 1",
     "createdAt":"2024-10-30",
     "updatedAt":"2024-10-30"
 }, {
-    "scheduler_id": "2",
-    "user_id": "2",
+    "id": "2",
+    "userId": "2",
     "title" : "제목2",
     "content" : "할 일 2",
     "createdAt":"2024-10-31",
@@ -69,8 +74,8 @@
 응답
 ```
 {
-    "scheduler_id": "1",
-    "user_id": "1",
+    "ud": "1",
+    "userId": "1",
     "title" : "제목1",
     "content" : "할 일 1",
     "createdAt":"2024-10-30",
@@ -89,8 +94,8 @@
 응답
 ```
 {
-    "scheduler_id": "1",
-    "user_id": "1",
+    "id": "1",
+    "userId": "1",
     "title" : "제목1",
     "content" : "할 일 1",
 }
@@ -104,7 +109,7 @@
 응답
 ```
 {
-    "scheduler_id" : "1"
+    "id" : "1"
 }
 ```
 
@@ -120,7 +125,7 @@
 요청
 ```
  {
-    "user_id": "user1",
+    "id": "user1",
     "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
@@ -128,8 +133,13 @@
 ```
 응답
 ```
-{
-    "user_id" : "1"
+ {
+    "id": "user1",
+    "password": "1234",
+    "name": "Jung",
+    "email" : "email@qwer.com"
+    "createdAt":"2024-10-30",
+    "updatedAt":"2024-10-30"
 }
 ```
 
@@ -142,7 +152,7 @@
 응답
 ```
  {
-    "user_id": "user1",
+    "id": "user1",
     "name": "Jung",
     "email" : "email@qwer.com"
 }
@@ -160,7 +170,7 @@
 응답
 ```
  {
-    "user_id": "user1",
+    "id": "user1",
     "name": "Jung",
     "email" : "email@qwer.com"
 }
@@ -172,6 +182,8 @@
 유저 -< 일정 
 
 유저는 여러 일정을 가질 수 있다. 일대다 관계
+
+![](https://github.com/user-attachments/assets/416e2d95-3db9-4f34-a752-d24c26a5ef62)
 
 ### 일정 테이블
 | Key | Logical | physical     | Domain   | Type    | Allow Null |
