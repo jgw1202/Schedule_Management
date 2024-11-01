@@ -230,9 +230,9 @@ created_date DATE NOT NULL,
 
 updated_date DATE NOT NULL,
 
-PRIMARY KEY (scheduler_id),
+PRIMARY KEY (id),
 
-FOREIGN KEY (user_id) REFERENCES user(user_id)
+FOREIGN KEY (user_id) REFERENCES user(id)
 
 );
 
@@ -252,7 +252,7 @@ created_date DATE NOT NULL,
 
 updated_date DATE NOT NULL,
 
-PRIMARY KEY (user_id)
+PRIMARY KEY (id)
 
 );
 
