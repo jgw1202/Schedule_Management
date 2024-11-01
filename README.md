@@ -30,7 +30,7 @@
 응답
 ```
 {
- "schedulers_id" : "1",
+ "scheduler_id" : "1",
 }
 ```
 
@@ -43,14 +43,14 @@
 응답
 ```
 "schedulers" :[ {
-    "schedule_id": "1",
+    "scheduler_id": "1",
     "user_id": "1",
     "title" : "제목1",
     "content" : "할 일 1",
     "createdAt":"2024-10-30",
     "updatedAt":"2024-10-30"
 }, {
-        "schedule_id": "2",
+    "scheduler_id": "2",
     "user_id": "2",
     "title" : "제목2",
     "content" : "할 일 2",
@@ -64,12 +64,12 @@
 
 요청
 ```
-/api/schedules/{schedule_id}
+/api/schedules/{scheduler_id}
 ```
 응답
 ```
 {
-    "schedule_id": "1",
+    "scheduler_id": "1",
     "user_id": "1",
     "title" : "제목1",
     "content" : "할 일 1",
@@ -82,8 +82,6 @@
 요청
 ```
  {
-    "schedule_id": "1",
-    "user_uid": "1",
     "title" : "수정된 제목1",
     "content" : "수정된 할 일1",
   }
@@ -91,19 +89,22 @@
 응답
 ```
 {
- "schedulers_id" : "1",
+    "scheduler_id": "1",
+    "user_id": "1",
+    "title" : "제목1",
+    "content" : "할 일 1",
 }
 ```
 - 일정 삭제
 
 요청
 ```
-/api/schedules/{schedule_id}
+/api/schedules/{scheduler_id}
 ```
 응답
 ```
 {
-    "schedulers_id" : "1"
+    "scheduler_id" : "1"
 }
 ```
 
@@ -158,8 +159,10 @@
 ```
 응답
 ```
-{
-    "user_id" : "1"
+ {
+    "user_id": "user1",
+    "name": "Jung",
+    "email" : "email@qwer.com"
 }
 ```
 
@@ -173,7 +176,7 @@
 ### 일정 테이블
 | Key | Logical | physical     | Domain   | Type    | Allow Null |
 |-----|---------|--------------|----------|---------|------------|
-| PK  | 아이디     | scheduler_id |   | Long    | N          |
+| PK  | 아이디     | id            |   | Long    | N          |
 | FK  | 아이디     | user_id      |   | Long    | N          |
 |     | 제목      | title        |  | VARCHAR | N          |
 |     | 할 일     | contents     |  | VARCHAR | N          |
@@ -181,38 +184,20 @@
 |     | 수정일자    | updated_date |  | DATE    | N          |
 
 ### 유저 테이블 
-| Key      | Logical | physical     | Domain   | Type    | Allow Null |
-|----------|---------|--------------|----------|---------|------------|
-| PK       | 아이디     | user_id      |   | Long    | N          |
-|    | 비밀번호    | password     |  | VARCHAR | N          |
-|  | 이름      | name         |  | VARCHAR | N          |
-|     | 이메일     | email        |  | VARCHAR | N          |
+| Key      | Logical | physical | Domain   | Type    | Allow Null |
+|----------|---------|---------|----------|---------|------------|
+| PK       | 아이디     | id      |   | Long    | N          |
+|    | 비밀번호    | password |  | VARCHAR | N          |
+|  | 이름      | name    |  | VARCHAR | N          |
+|     | 이메일     | email   |  | VARCHAR | N          |
 |    | 생성일자    | created_date |  | DATE    | N          |
 |    | 수정일자    | updated_date |  | DATE    | N          |
 
 ## SQL
 
-CREATE TABLE user (
-
-user_id BIGINT NOT NULL AUTO_INCREMENT,
-
-password VARCHAR(255) NOT NULL,
-
-name VARCHAR(255) NOT NULL,
-
-email VARCHAR(255) NOT NULL,
-
-created_date DATE NOT NULL,
-
-updated_date DATE NOT NULL,
-
-PRIMARY KEY (user_id)
-
-);
-
 CREATE TABLE scheduler (
 
-scheduler_id BIGINT NOT NULL AUTO_INCREMENT,
+id BIGINT NOT NULL AUTO_INCREMENT,
 
 user_id BIGINT NOT NULL,
 
@@ -229,5 +214,27 @@ PRIMARY KEY (scheduler_id),
 FOREIGN KEY (user_id) REFERENCES user(user_id)
 
 );
+
+------------------------------------------------------
+
+CREATE TABLE user (
+
+id BIGINT NOT NULL AUTO_INCREMENT,
+
+password VARCHAR(255) NOT NULL,
+
+name VARCHAR(255) NOT NULL,
+
+email VARCHAR(255) NOT NULL,
+
+created_date DATE NOT NULL,
+
+updated_date DATE NOT NULL,
+
+PRIMARY KEY (user_id)
+
+);
+
+
 
 
