@@ -61,7 +61,7 @@ public class SchedulerServiceImpl implements  SchedulerService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password, userName and contents are required values.");
         }
 
-        scheduler.update(password, userName, contents);
+        scheduler.update(userName, contents);
 
         return new SchedulerResponseDto(scheduler);
 

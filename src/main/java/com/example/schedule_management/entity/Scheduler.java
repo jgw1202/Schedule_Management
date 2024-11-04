@@ -26,8 +26,7 @@ public class Scheduler {
         this.updatedAt = new Date();
     }
 
-    public void update(String password, String userName, String contents) {
-        this.password = password;
+    public void update(String userName, String contents) {
         this.userName = userName;
         this.contents = contents;
         this.updatedAt = new Date();
