@@ -167,6 +167,7 @@
 요청
 ```
 {
+    "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
 }
@@ -230,9 +231,9 @@ created_date DATE NOT NULL,
 
 updated_date DATE NOT NULL,
 
-PRIMARY KEY (id),
+PRIMARY KEY (scheduler_id),
 
-FOREIGN KEY (user_id) REFERENCES user(id)
+FOREIGN KEY (user_id) REFERENCES user(user_id)
 
 );
 
@@ -252,7 +253,7 @@ created_date DATE NOT NULL,
 
 updated_date DATE NOT NULL,
 
-PRIMARY KEY (id)
+PRIMARY KEY (user_id)
 
 );
 
