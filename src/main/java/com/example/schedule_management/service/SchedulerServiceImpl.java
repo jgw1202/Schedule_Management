@@ -1,5 +1,43 @@
 package com.example.schedule_management.service;
 
-public class SchedulerServiceImpl implements  SchedulerService{
+import com.example.schedule_management.dto.SchedulerRequestDto;
+import com.example.schedule_management.dto.SchedulerResponseDto;
+import com.example.schedule_management.entity.Scheduler;
+import com.example.schedule_management.repository.SchedulerRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class SchedulerServiceImpl implements  SchedulerService {
+
+    private final SchedulerRepository schedulerRepository;
+
+    @Override
+    public SchedulerResponseDto saveScheduler(SchedulerRequestDto dto) {
+
+        Scheduler scheduler = new Scheduler(dto.getPassword(), dto.getUserName(), dto.getContents());
+
+        Scheduler savedScheduler = schedulerRepository.saveScheduler(scheduler);
+
+        return new SchedulerResponseDto(savedScheduler);
+    }
+
+    @Override
+    public List<SchedulerResponseDto> findAllSchedulers() {
+
+        List<SchedulerResponseDto> allSchedulers = schedulerRepository.findAllSchedulers();
+
+        return allSchedulers;
+    }
+
+    @Override
+    public SchedulerResponseDto findSchedulerById(Long id) {
+
+        Scheduler scheduler = schedulerRepository.findSchedulerById(id);
+
+        return new SchedulerResponseDto(scheduler);
+    }
 }

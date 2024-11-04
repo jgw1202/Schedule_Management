@@ -20,20 +20,19 @@
 요청
 ```
 {
- "userId" : 1,
+ "password" : "1234",
 
- "title" : "제목",
+ "userName" : "작성자명1",
 
- "content" : "할 일"
+ "contents" : "할 일"
 }
 ```
 응답
 ```
 {
     "id": 1,
-    "userId": 1,
-    "title" : "제목1",
-    "content" : "할 일 1",
+    "userName" : "작성자명1",
+    "contents" : "할 일 1",
     "createdAt":"2024-10-30",
     "updatedAt":"2024-10-30"
 }
@@ -49,16 +48,14 @@
 ```
 "schedulers" :[ {
     "id": 1,
-    "userId": 1,
-    "title" : "제목1",
-    "content" : "할 일 1",
+    "userName" : "작성자명1",
+    "contents" : "할 일 1",
     "createdAt":"2024-10-30",
     "updatedAt":"2024-10-30"
 }, {
     "id": 2,
-    "userId": 2,
-    "title" : "제목2",
-    "content" : "할 일 2",
+    "userName" : "작성자명2",
+    "contents" : "할 일 2",
     "createdAt":"2024-10-31",
     "updatedAt":"2024-10-31"
     },
@@ -75,9 +72,8 @@
 ```
 {
     "id": 1,
-    "userId": 1,
-    "title" : "제목1",
-    "content" : "할 일 1",
+    "userName" : "작성자명1",
+    "contents" : "할 일 1",
     "createdAt":"2024-10-30",
     "updatedAt":"2024-10-30"
 }
@@ -87,17 +83,17 @@
 요청
 ```
  {
-    "title" : "수정된 제목1",
-    "content" : "수정된 할 일1",
+    "password" : "1234"
+    "userName" : "작성자명1",
+    "contents" : "수정된 할 일1",
   }
 ```
 응답
 ```
 {
     "id": 1,
-    "userId": 1,
-    "title" : "제목1",
-    "content" : "할 일 1",
+    "userName" : "작성자명1",
+    "contents" : "할 일 1",
     "createdAt":"2024-10-30",
     "updatedAt":"2024-10-30"
 }
@@ -106,12 +102,18 @@
 
 요청
 ```
-/api/schedules/{scheduler_id}
+ {
+    "password" : "1234"
+  }
 ```
 응답
 ```
 {
-    "id" : 1
+    "id": 1,
+    "userName" : "작성자명1",
+    "contents" : "할 일 1",
+    "createdAt":"2024-10-30",
+    "updatedAt":"2024-10-30"
 }
 ```
 
@@ -127,7 +129,6 @@
 요청
 ```
  {
-    "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
 }
@@ -136,7 +137,6 @@
 ```
  {
     "id": 1,
-    "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
     "createdAt":"2024-10-30",
@@ -154,7 +154,6 @@
 ```
  {
     "id": 1,
-    "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
     "createdAt":"2024-10-30",
@@ -167,7 +166,6 @@
 요청
 ```
 {
-    "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
 }
@@ -176,7 +174,6 @@
 ```
  {
     "id": 1,
-    "password": "1234",
     "name": "Jung",
     "email" : "email@qwer.com"
     "createdAt":"2024-10-30",
@@ -191,16 +188,16 @@
 
 유저는 여러 일정을 가질 수 있다. 일대다 관계
 
-![](https://github.com/user-attachments/assets/0422ca9a-34e7-43eb-9fb4-c0e14d24a121)
-
+![image](https://github.com/user-attachments/assets/583480a3-ce86-4708-81ca-9747cbd939da)
 
 
 ### 일정 테이블
 | Key | Logical | physical     | Domain   | Type      | Allow Null |
 |-----|---------|--------------|----------|-----------|------------|
-| PK  | 아이디     | id            |   | BIGINT    | N          |
+| PK  | 아이디     | id           |   | BIGINT    | N          |
 | FK  | 아이디     | user_id      |   | BIGINT    | N          |
-|     | 제목      | title        |  | VARCHAR(255)   | N          |
+|     | 비밀번호      | password     |  | VARCHAR(255)   | N          |
+|  | 이름      | user_name    |  | VARCHAR(255)      | N          |
 |     | 할 일     | contents     |  | VARCHAR(255)   | N          |
 |     | 생성일자    | created_date |  | TIMESTAMP | N          |
 |     | 수정일자    | updated_date |  | TIMESTAMP      | N          |
@@ -209,7 +206,6 @@
 | Key      | Logical | physical | Domain   | Type         | Allow Null |
 |----------|---------|---------|----------|--------------|------------|
 | PK       | 아이디     | id      |   | BIGINT       | N          |
-|    | 비밀번호    | password |  | VARCHAR(255) | N          |
 |  | 이름      | name    |  | VARCHAR(255)      | N          |
 |     | 이메일     | email   |  | VARCHAR(255)      | N          |
 |    | 생성일자    | created_date |  | TIMESTAMP    | N          |
@@ -223,7 +219,9 @@ id BIGINT NOT NULL AUTO_INCREMENT,
 
 user_id BIGINT NOT NULL,
 
-title VARCHAR(255) NOT NULL,
+password VARCHAR(255) NOT NULL,
+
+userName VARCHAR(255) NOT NULL,
 
 contents VARCHAR(255) NOT NULL,
 
@@ -242,8 +240,6 @@ FOREIGN KEY (user_id) REFERENCES user(user_id)
 CREATE TABLE user (
 
 id BIGINT NOT NULL AUTO_INCREMENT,
-
-password VARCHAR(255) NOT NULL,
 
 name VARCHAR(255) NOT NULL,
 

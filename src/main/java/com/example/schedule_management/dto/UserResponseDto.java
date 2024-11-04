@@ -8,7 +8,6 @@ import java.util.Date;
 @Getter
 public class UserResponseDto {
     private Long id;
-    private String password;
     private String name;
     private String email;
     private Date createdAt;
@@ -16,7 +15,6 @@ public class UserResponseDto {
 
     public UserResponseDto(User user) {
         this.id = user.getId();
-        this.password = user.getPassword();
         this.name = user.getName();
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();

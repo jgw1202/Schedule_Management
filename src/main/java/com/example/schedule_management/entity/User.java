@@ -11,14 +11,13 @@ import java.util.Date;
 public class User {
     @Setter
     private Long id;
-    private String password;
     private String name;
     private String email;
     private Date createdAt;
     private Date updatedAt;
 
-    public User(String password, String name, String email) {
-        this.password = password;
+    public User(String name, String email) {
+
         this.name = name;
         this.email = email;
         this.createdAt = new Date();
