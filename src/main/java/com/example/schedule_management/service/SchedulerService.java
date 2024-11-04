@@ -15,4 +15,6 @@ public interface SchedulerService {
     SchedulerResponseDto findSchedulerById(Long id);
 
     SchedulerResponseDto updateScheduler(Long id, String password, String userName, String contents);
+
+    void deleteScheduler(Long id, String password);
 }

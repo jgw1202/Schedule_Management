@@ -41,4 +41,11 @@ public class SchedulerController {
     public ResponseEntity<SchedulerResponseDto> updateScheduler(@PathVariable Long id, @RequestBody SchedulerRequestDto dto) {
         return new ResponseEntity<>(schedulerService.updateScheduler(id, dto.getPassword(), dto.getUserName(), dto.getContents()), HttpStatus.OK);
     }
+
+    // 일정 삭제
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteScheduler(@PathVariable Long id, @RequestBody SchedulerRequestDto dto) {
+        schedulerService.deleteScheduler(id,dto.getPassword());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

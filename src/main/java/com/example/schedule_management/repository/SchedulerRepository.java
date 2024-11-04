@@ -11,4 +11,6 @@ public interface SchedulerRepository {
     List<SchedulerResponseDto> findAllSchedulers();
 
     Scheduler findSchedulerById(Long id);
+
+    void deleteScheduler(Long id);
 }

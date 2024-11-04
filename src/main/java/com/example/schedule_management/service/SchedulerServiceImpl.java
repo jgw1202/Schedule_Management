@@ -67,5 +67,16 @@ public class SchedulerServiceImpl implements  SchedulerService {
 
     }
 
+    @Override
+    public void deleteScheduler(Long id, String password) {
+
+        Scheduler scheduler = schedulerRepository.findSchedulerById(id);
+        // NPE 방지
+        if (scheduler == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+        schedulerRepository.deleteScheduler(id);
+    }
+
 
 }

@@ -39,4 +39,9 @@ public class JdbcTemplateSchedulerRepository implements  SchedulerRepository {
     public Scheduler findSchedulerById(Long id) {
         return schedulerList.get(id);
     }
+
+    @Override
+    public void deleteScheduler(Long id) {
+        schedulerList.remove(id);
+    }
 }
