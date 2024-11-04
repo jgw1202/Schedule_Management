@@ -36,5 +36,9 @@ public class SchedulerController {
         return new ResponseEntity<>(schedulerService.findSchedulerById(id), HttpStatus.OK);
     }
 
-
+    // 일정 수정
+    @PutMapping("{id}")
+    public ResponseEntity<SchedulerResponseDto> updateScheduler(@PathVariable Long id, @RequestBody SchedulerRequestDto dto) {
+        return new ResponseEntity<>(schedulerService.updateScheduler(id, dto.getPassword(), dto.getUserName(), dto.getContents()), HttpStatus.OK);
+    }
 }

@@ -45,4 +45,27 @@ public class SchedulerServiceImpl implements  SchedulerService {
         }
         return new SchedulerResponseDto(scheduler);
     }
+
+    @Override
+    public SchedulerResponseDto updateScheduler(Long id, String password, String userName, String contents) {
+
+        Scheduler scheduler = schedulerRepository.findSchedulerById(id);
+
+        // NPE 방지
+        if (scheduler == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+
+        // 필수값 검증
+        if (password == null || userName == null|| contents == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The password, userName and contents are required values.");
+        }
+
+        scheduler.update(password, userName, contents);
+
+        return new SchedulerResponseDto(scheduler);
+
+    }
+
+
 }
