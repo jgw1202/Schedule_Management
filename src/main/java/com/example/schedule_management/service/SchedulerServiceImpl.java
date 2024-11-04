@@ -5,7 +5,9 @@ import com.example.schedule_management.dto.SchedulerResponseDto;
 import com.example.schedule_management.entity.Scheduler;
 import com.example.schedule_management.repository.SchedulerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -37,7 +39,10 @@ public class SchedulerServiceImpl implements  SchedulerService {
     public SchedulerResponseDto findSchedulerById(Long id) {
 
         Scheduler scheduler = schedulerRepository.findSchedulerById(id);
-
+        // NPE 방지
+        if (scheduler == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
         return new SchedulerResponseDto(scheduler);
     }
 }
