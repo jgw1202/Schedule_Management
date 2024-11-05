@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Repository
-public class JdbcTemplateUserRepository implements  UserRepository {
+public class UserRepositoryImpl implements  UserRepository {
     private final Map<Long, User> userList = new HashMap<>();
 
     @Override

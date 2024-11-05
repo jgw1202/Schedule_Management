@@ -9,7 +9,8 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 public class Scheduler {
-    @Setter
+
+
     private Long id;
     private Long userId;
     private String password;

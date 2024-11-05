@@ -17,7 +17,6 @@ public class User {
     private Date updatedAt;
 
     public User(String name, String email) {
-
         this.name = name;
         this.email = email;
         this.createdAt = new Date();

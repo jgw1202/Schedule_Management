@@ -2,46 +2,55 @@ package com.example.schedule_management.repository;
 
 import com.example.schedule_management.dto.SchedulerResponseDto;
 import com.example.schedule_management.entity.Scheduler;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
-public class JdbcTemplateSchedulerRepository implements  SchedulerRepository {
+public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
+    private final JdbcTemplate jdbcTemplate;
 
-   private final Map<Long, Scheduler> schedulerList = new HashMap<>();
+    public JdbcTemplateSchedulerRepository(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+
     @Override
-    public Scheduler saveScheduler(Scheduler scheduler) {
+    public SchedulerResponseDto saveScheduler(Scheduler scheduler) {
 
-        Long schedulerId = schedulerList.isEmpty() ? 1 : Collections.max(schedulerList.keySet()) + 1;
-        scheduler.setId(schedulerId);
+        SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+        jdbcInsert.withTableName("scheduler").usingGeneratedKeyColumns("id");
 
-        schedulerList.put(schedulerId, scheduler);
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("password", scheduler.getUserName());
+        parameters.put("user_name", scheduler.getUserName());
+        parameters.put("contents", scheduler.getContents());
+        parameters.put("created_at", scheduler.getCreatedAt());
+        parameters.put("updated_at", scheduler.getUpdatedAt());
 
-        return scheduler;
+        // 저장 후 생성된 key값을 Number 타입으로 반환하는 메서드
+        Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
+        return new SchedulerResponseDto(key.longValue(), scheduler.getUserName(), scheduler.getContents(),scheduler.getCreatedAt(), scheduler.getUpdatedAt());
     }
 
     @Override
     public List<SchedulerResponseDto> findAllSchedulers() {
-
-        List<SchedulerResponseDto> allSchedulers = new ArrayList<>();
-
-        for(Scheduler scheduler : schedulerList.values()) {
-            SchedulerResponseDto responseDto = new SchedulerResponseDto(scheduler);
-            allSchedulers.add(responseDto);
-        }
-
-        return allSchedulers;
+        return null;
     }
 
     @Override
     public Scheduler findSchedulerById(Long id) {
-        return schedulerList.get(id);
+        return null;
     }
 
     @Override
     public void deleteScheduler(Long id) {
-        schedulerList.remove(id);
+
     }
 }

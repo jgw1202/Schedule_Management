@@ -199,13 +199,13 @@
 |     | 수정일자    | updated_date |  | TIMESTAMP      | N          |
 
 ### 유저 테이블 
-| Key      | Logical | physical | Domain   | Type         | Allow Null |
-|----------|---------|---------|----------|--------------|------------|
-| PK       | 아이디     | id      |   | BIGINT       | N          |
-|  | 이름      | name    |  | VARCHAR(255)      | N          |
-|     | 이메일     | email   |  | VARCHAR(255)      | N          |
-|    | 생성일자    | created_date |  | TIMESTAMP    | N          |
-|    | 수정일자    | updated_date |  | TIMESTAMP    | N          |
+| Key      | Logical | physical   | Domain   | Type         | Allow Null |
+|----------|---------|------------|----------|--------------|------------|
+| PK       | 아이디     | id         |   | BIGINT       | N          |
+|  | 이름      | name       |  | VARCHAR(255)      | N          |
+|     | 이메일     | email      |  | VARCHAR(255)      | N          |
+|    | 생성일자    | created_at |  | TIMESTAMP    | N          |
+|    | 수정일자    | updated_at |  | TIMESTAMP    | N          |
 
 ## SQL
 
@@ -217,13 +217,13 @@ user_id BIGINT NOT NULL,
 
 password VARCHAR(255) NOT NULL,
 
-userName VARCHAR(255) NOT NULL,
+user_name VARCHAR(255) NOT NULL,
 
 contents VARCHAR(255) NOT NULL,
 
-created_date DATE NOT NULL,
+created_at TIMESTAMP NOT NULL,
 
-updated_date DATE NOT NULL,
+updated_at TIMESTAMP NOT NULL,
 
 PRIMARY KEY (id),
 
@@ -241,9 +241,9 @@ name VARCHAR(255) NOT NULL,
 
 email VARCHAR(255) NOT NULL,
 
-created_date DATE NOT NULL,
+created_at TIMESTAMP NOT NULL,
 
-updated_date DATE NOT NULL,
+updated_at TIMESTAMP NOT NULL,
 
 PRIMARY KEY (id)
 

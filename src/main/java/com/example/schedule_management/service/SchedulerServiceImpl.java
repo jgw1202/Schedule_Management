@@ -22,9 +22,7 @@ public class SchedulerServiceImpl implements  SchedulerService {
 
         Scheduler scheduler = new Scheduler(dto.getPassword(), dto.getUserName(), dto.getContents());
 
-        Scheduler savedScheduler = schedulerRepository.saveScheduler(scheduler);
-
-        return new SchedulerResponseDto(savedScheduler);
+        return schedulerRepository.saveScheduler(scheduler);
     }
 
     @Override

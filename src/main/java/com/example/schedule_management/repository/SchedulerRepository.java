@@ -6,7 +6,7 @@ import com.example.schedule_management.entity.Scheduler;
 import java.util.List;
 
 public interface SchedulerRepository {
-    Scheduler saveScheduler(Scheduler scheduler);
+    SchedulerResponseDto saveScheduler(Scheduler scheduler);
 
     List<SchedulerResponseDto> findAllSchedulers();
 

@@ -2,11 +2,13 @@ package com.example.schedule_management.dto;
 
 import com.example.schedule_management.entity.Scheduler;
 import com.example.schedule_management.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Date;
 
 @Getter
+@AllArgsConstructor
 public class SchedulerResponseDto {
     private Long id;
     private String userName;
