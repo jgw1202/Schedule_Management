@@ -3,11 +3,14 @@ package com.example.schedule_management.repository;
 import com.example.schedule_management.dto.SchedulerResponseDto;
 import com.example.schedule_management.entity.Scheduler;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +44,22 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
 
     @Override
     public List<SchedulerResponseDto> findAllSchedulers() {
-        return null;
+        return jdbcTemplate.query("select * from scheduler", schedulerRowMapper());
+    }
+
+    private RowMapper<SchedulerResponseDto> schedulerRowMapper() {
+        return new RowMapper<SchedulerResponseDto>() {
+            @Override
+            public SchedulerResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new SchedulerResponseDto(
+                        rs.getLong("id"),
+                        rs.getString("user_name"),
+                        rs.getString("contents"),
+                        rs.getDate("created_at"),
+                        rs.getDate("updated_at")
+                );
+            }
+        };
     }
 
     @Override
