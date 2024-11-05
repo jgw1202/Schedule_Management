@@ -13,5 +13,7 @@ public interface SchedulerRepository {
 
     Optional<Scheduler> findSchedulerById(Long id);
 
+    int updateScheduler(Long id, String userName, String contents);
+
     void deleteScheduler(Long id);
 }

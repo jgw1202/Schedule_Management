@@ -69,13 +69,18 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
 
        return result.stream().findAny();
     }
+
+    @Override
+    public int updateScheduler(Long id, String userName, String contents) {
+        return jdbcTemplate.update("update scheduler set user_name = ?, contents = ? where id = ?", userName, contents, id);
+    }
+
     private RowMapper<Scheduler> schedulerRowMapperV2() {
         return new RowMapper<Scheduler>() {
             @Override
             public Scheduler mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return new Scheduler(
                         rs.getLong("id"),
-                        rs.getLong("user_id"),
                         rs.getString("password"),
                         rs.getString("user_name"),
                         rs.getString("contents"),

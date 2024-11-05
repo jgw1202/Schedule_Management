@@ -12,7 +12,6 @@ public class Scheduler {
 
 
     private Long id;
-    private Long userId;
     private String password;
     private String userName;
     private String contents;
