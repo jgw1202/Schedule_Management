@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,17 +37,18 @@ public class SchedulerServiceImpl implements  SchedulerService {
     @Override
     public SchedulerResponseDto findSchedulerById(Long id) {
 
-        Scheduler scheduler = schedulerRepository.findSchedulerById(id);
+        Optional<Scheduler> scheduler = schedulerRepository.findSchedulerById(id);
         // NPE 방지
         if (scheduler == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
-        return new SchedulerResponseDto(scheduler);
+        return new SchedulerResponseDto(scheduler.get());
     }
 
     @Override
     public SchedulerResponseDto updateScheduler(Long id, String password, String userName, String contents) {
 
+        /*
         Scheduler scheduler = schedulerRepository.findSchedulerById(id);
 
         // NPE 방지
@@ -62,18 +64,23 @@ public class SchedulerServiceImpl implements  SchedulerService {
         scheduler.update(userName, contents);
 
         return new SchedulerResponseDto(scheduler);
-
+        */
+        return null;
     }
 
     @Override
     public void deleteScheduler(Long id, String password) {
 
-        Scheduler scheduler = schedulerRepository.findSchedulerById(id);
+       /* Scheduler scheduler = schedulerRepository.findSchedulerById(id);
         // NPE 방지
         if (scheduler == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
         schedulerRepository.deleteScheduler(id);
+
+        */
+
+
     }
 
 
