@@ -93,7 +93,7 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
     }
 
     @Override
-    public void deleteScheduler(Long id) {
-
+    public int deleteScheduler(Long id) {
+        return jdbcTemplate.update("delete from scheduler where id = ?", id);
     }
 }
