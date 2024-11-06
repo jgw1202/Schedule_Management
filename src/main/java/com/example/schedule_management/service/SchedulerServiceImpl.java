@@ -15,32 +15,25 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class SchedulerServiceImpl implements  SchedulerService {
+public class SchedulerServiceImpl implements SchedulerService {
 
     private final SchedulerRepository schedulerRepository;
 
     @Override
     public SchedulerResponseDto saveScheduler(SchedulerRequestDto dto) {
-
         Scheduler scheduler = new Scheduler(dto.getPassword(), dto.getUserName(), dto.getContents());
-
         return schedulerRepository.saveScheduler(scheduler);
     }
 
     @Override
     public List<SchedulerResponseDto> findAllSchedulers() {
-
-        List<SchedulerResponseDto> allSchedulers = schedulerRepository.findAllSchedulers();
-
-        return allSchedulers;
+        return schedulerRepository.findAllSchedulers();
     }
 
     @Override
     public SchedulerResponseDto findSchedulerById(Long id) {
-
         Optional<Scheduler> scheduler = schedulerRepository.findSchedulerById(id);
-        // NPE 방지
-        if (scheduler == null) {
+        if (scheduler.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
         return new SchedulerResponseDto(scheduler.get());
@@ -49,34 +42,39 @@ public class SchedulerServiceImpl implements  SchedulerService {
     @Transactional
     @Override
     public SchedulerResponseDto updateScheduler(Long id, String password, String userName, String contents) {
-
-        // 필수값 검증
         if (userName == null || contents == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and content are required values.");
         }
 
-        // memo 수정
+        Optional<Scheduler> existingScheduler = schedulerRepository.findSchedulerById(id);
+        if (existingScheduler.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
+        }
+        if (!existingScheduler.get().getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+        }
+
         int updatedRow = schedulerRepository.updateScheduler(id, userName, contents);
-        // 수정된 row가 0개라면
         if (updatedRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
         }
 
-        // 수정된 메모 조회
         return new SchedulerResponseDto(schedulerRepository.findSchedulerById(id).get());
-
     }
 
     @Override
     public void deleteScheduler(Long id, String password) {
+        Optional<Scheduler> existingScheduler = schedulerRepository.findSchedulerById(id);
+        if (existingScheduler.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+        if (!existingScheduler.get().getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+        }
 
         int deleteRow = schedulerRepository.deleteScheduler(id);
-        // NPE 방지
         if (deleteRow == 0) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
-
     }
-
-
 }

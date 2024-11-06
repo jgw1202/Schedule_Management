@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
+public class JdbcTemplateSchedulerRepository implements SchedulerRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcTemplateSchedulerRepository(DataSource dataSource) {
@@ -26,21 +26,18 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
 
     @Override
     public SchedulerResponseDto saveScheduler(Scheduler scheduler) {
-
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName("scheduler").usingGeneratedKeyColumns("id");
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("password", scheduler.getUserName());
+        parameters.put("password", scheduler.getPassword());
         parameters.put("user_name", scheduler.getUserName());
         parameters.put("contents", scheduler.getContents());
         parameters.put("created_at", scheduler.getCreatedAt());
         parameters.put("updated_at", scheduler.getUpdatedAt());
 
-        // 저장 후 생성된 key값을 Number 타입으로 반환하는 메서드
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-
-        return new SchedulerResponseDto(key.longValue(), scheduler.getUserName(), scheduler.getContents(),scheduler.getCreatedAt(), scheduler.getUpdatedAt());
+        return new SchedulerResponseDto(key.longValue(), scheduler.getUserName(), scheduler.getContents(), scheduler.getCreatedAt(), scheduler.getUpdatedAt());
     }
 
     @Override
@@ -65,14 +62,13 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
 
     @Override
     public Optional<Scheduler> findSchedulerById(Long id) {
-       List<Scheduler> result = jdbcTemplate.query("select * from scheduler where id = ?", schedulerRowMapperV2(), id);
-
-       return result.stream().findAny();
+        List<Scheduler> result = jdbcTemplate.query("select * from scheduler where id = ?", schedulerRowMapperV2(), id);
+        return result.stream().findAny();
     }
 
     @Override
     public int updateScheduler(Long id, String userName, String contents) {
-        return jdbcTemplate.update("update scheduler set user_name = ?, contents = ? where id = ?", userName, contents, id);
+        return jdbcTemplate.update("update scheduler set user_name = ?, contents = ?, updated_at = NOW() where id = ?", userName, contents, id);
     }
 
     private RowMapper<Scheduler> schedulerRowMapperV2() {
@@ -88,7 +84,6 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository{
                         rs.getDate("updated_at")
                 );
             }
-
         };
     }
 
