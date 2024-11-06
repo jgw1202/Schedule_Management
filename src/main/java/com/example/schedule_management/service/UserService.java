@@ -7,4 +7,6 @@ import com.example.schedule_management.dto.UserResponseDto;
 
 public interface UserService {
     UserResponseDto saveUser(UserRequestDto dto);
+
+    UserResponseDto findUserById(Long id);
 }
