@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface SchedulerRepository {
     SchedulerResponseDto saveScheduler(Scheduler scheduler);
 
-    List<SchedulerResponseDto> findAllSchedulers();
+    List<SchedulerResponseDto> findAllSchedulers(int page, int size);
 
     Optional<Scheduler> findSchedulerById(Long id);
 
@@ -17,5 +17,6 @@ public interface SchedulerRepository {
 
     int deleteScheduler(Long id);
 
-
+    int countAllSchedulers();
 }
+

@@ -11,40 +11,49 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/schedulers")
 public class SchedulerController {
-
     private final SchedulerService schedulerService;
 
-    // 일정 등록
+    public SchedulerController(SchedulerService schedulerService) {
+        this.schedulerService = schedulerService;
+    }
+
     @PostMapping
-    public ResponseEntity<SchedulerResponseDto> createScheduler(@RequestBody SchedulerRequestDto dto) {
-        return new ResponseEntity<>(schedulerService.saveScheduler(dto), HttpStatus.CREATED);
+    public ResponseEntity<SchedulerResponseDto> createScheduler(@RequestBody SchedulerRequestDto schedulerRequestDto) {
+        SchedulerResponseDto createdScheduler = schedulerService.saveScheduler(schedulerRequestDto);
+        return new ResponseEntity<>(createdScheduler, HttpStatus.CREATED);
     }
 
-    // 일정 목록 조회
     @GetMapping
-    public ResponseEntity<List<SchedulerResponseDto>> findAllScheduler() {
-        return new ResponseEntity<>(schedulerService.findAllSchedulers(), HttpStatus.OK);
+    public ResponseEntity<List<SchedulerResponseDto>> getAllSchedulers(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size) {
+        List<SchedulerResponseDto> schedulers = schedulerService.findAllSchedulers(page, size);
+        return new ResponseEntity<>(schedulers, HttpStatus.OK);
     }
 
-    // 일정 조회
-    @GetMapping("{id}")
-    public ResponseEntity<SchedulerResponseDto> findSchedulerById(@PathVariable Long id) {
-        return new ResponseEntity<>(schedulerService.findSchedulerById(id), HttpStatus.OK);
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getSchedulerCount() {
+        int count = schedulerService.countAllSchedulers();
+        return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
-    // 일정 수정
-    @PutMapping("{id}")
-    public ResponseEntity<SchedulerResponseDto> updateScheduler(@PathVariable Long id, @RequestBody SchedulerRequestDto dto) {
-        return new ResponseEntity<>(schedulerService.updateScheduler(id, dto.getPassword(), dto.getUserName(), dto.getContents()), HttpStatus.OK);
+    @GetMapping("/{id}")
+    public ResponseEntity<SchedulerResponseDto> getSchedulerById(@PathVariable Long id) {
+        SchedulerResponseDto scheduler = schedulerService.findSchedulerById(id);
+        return new ResponseEntity<>(scheduler, HttpStatus.OK);
     }
 
-    // 일정 삭제
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteScheduler(@PathVariable Long id, @RequestBody SchedulerRequestDto dto) {
-        schedulerService.deleteScheduler(id,dto.getPassword());
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<SchedulerResponseDto> updateScheduler(@PathVariable Long id, @RequestBody SchedulerRequestDto schedulerRequestDto) {
+        SchedulerResponseDto updatedScheduler = schedulerService.updateScheduler(id, schedulerRequestDto.getPassword(), schedulerRequestDto.getUserName(), schedulerRequestDto.getContents());
+        return new ResponseEntity<>(updatedScheduler, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteScheduler(@PathVariable Long id, @RequestParam String password) {
+        schedulerService.deleteScheduler(id, password);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

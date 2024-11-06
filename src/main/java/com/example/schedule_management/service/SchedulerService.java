@@ -6,11 +6,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface SchedulerService {
     SchedulerResponseDto saveScheduler(SchedulerRequestDto dto);
 
-    List<SchedulerResponseDto> findAllSchedulers();
+    List<SchedulerResponseDto> findAllSchedulers(int page, int size);
 
     SchedulerResponseDto findSchedulerById(Long id);
 
@@ -18,4 +17,6 @@ public interface SchedulerService {
 
     void deleteScheduler(Long id, String password);
 
+    int countAllSchedulers();
 }
+

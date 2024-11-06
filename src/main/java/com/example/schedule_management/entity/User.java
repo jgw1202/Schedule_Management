@@ -2,14 +2,13 @@ package com.example.schedule_management.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
 @AllArgsConstructor
 public class User {
-    @Setter
+
     private Long id;
     private String name;
     private String email;
@@ -23,7 +22,4 @@ public class User {
         this.updatedAt = new Date();
     }
 
-    public void setUpdatedAt() {
-        this.updatedAt = new Date();
-    }
 }

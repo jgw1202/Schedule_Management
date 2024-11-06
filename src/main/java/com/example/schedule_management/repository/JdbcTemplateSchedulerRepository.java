@@ -41,23 +41,26 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository {
     }
 
     @Override
-    public List<SchedulerResponseDto> findAllSchedulers() {
-        return jdbcTemplate.query("select * from scheduler", schedulerRowMapper());
+    public List<SchedulerResponseDto> findAllSchedulers(int page, int size) {
+        int offset = (page - 1) * size;
+        String query = "SELECT * FROM scheduler ORDER BY id DESC LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(query, schedulerRowMapper(), size, offset);
+    }
+
+    @Override
+    public int countAllSchedulers() {
+        String query = "SELECT COUNT(*) FROM scheduler";
+        return jdbcTemplate.queryForObject(query, Integer.class);
     }
 
     private RowMapper<SchedulerResponseDto> schedulerRowMapper() {
-        return new RowMapper<SchedulerResponseDto>() {
-            @Override
-            public SchedulerResponseDto mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new SchedulerResponseDto(
-                        rs.getLong("id"),
-                        rs.getString("user_name"),
-                        rs.getString("contents"),
-                        rs.getDate("created_at"),
-                        rs.getDate("updated_at")
-                );
-            }
-        };
+        return (rs, rowNum) -> new SchedulerResponseDto(
+                rs.getLong("id"),
+                rs.getString("user_name"),
+                rs.getString("contents"),
+                rs.getDate("created_at"),
+                rs.getDate("updated_at")
+        );
     }
 
     @Override
@@ -72,19 +75,14 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository {
     }
 
     private RowMapper<Scheduler> schedulerRowMapperV2() {
-        return new RowMapper<Scheduler>() {
-            @Override
-            public Scheduler mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new Scheduler(
-                        rs.getLong("id"),
-                        rs.getString("password"),
-                        rs.getString("user_name"),
-                        rs.getString("contents"),
-                        rs.getDate("created_at"),
-                        rs.getDate("updated_at")
-                );
-            }
-        };
+        return (rs, rowNum) -> new Scheduler(
+                rs.getLong("id"),
+                rs.getString("password"),
+                rs.getString("user_name"),
+                rs.getString("contents"),
+                rs.getDate("created_at"),
+                rs.getDate("updated_at")
+        );
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,17 +27,24 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public List<SchedulerResponseDto> findAllSchedulers() {
-        return schedulerRepository.findAllSchedulers();
+    public List<SchedulerResponseDto> findAllSchedulers(int page, int size) {
+        return schedulerRepository.findAllSchedulers(page, size);
     }
 
     @Override
     public SchedulerResponseDto findSchedulerById(Long id) {
         Optional<Scheduler> scheduler = schedulerRepository.findSchedulerById(id);
         if (scheduler.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
         }
-        return new SchedulerResponseDto(scheduler.get());
+        Scheduler foundScheduler = scheduler.get();
+        return new SchedulerResponseDto(
+                foundScheduler.getId(),
+                foundScheduler.getUserName(),
+                foundScheduler.getContents(),
+                foundScheduler.getCreatedAt(),
+                foundScheduler.getUpdatedAt()
+        );
     }
 
     @Transactional
@@ -48,7 +56,7 @@ public class SchedulerServiceImpl implements SchedulerService {
 
         Optional<Scheduler> existingScheduler = schedulerRepository.findSchedulerById(id);
         if (existingScheduler.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
         }
         if (!existingScheduler.get().getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
@@ -59,14 +67,20 @@ public class SchedulerServiceImpl implements SchedulerService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No data has been modified.");
         }
 
-        return new SchedulerResponseDto(schedulerRepository.findSchedulerById(id).get());
+        return new SchedulerResponseDto(
+                existingScheduler.get().getId(),
+                userName,
+                contents,
+                existingScheduler.get().getCreatedAt(),
+                new Date()  // updatedAt 갱신
+        );
     }
 
     @Override
     public void deleteScheduler(Long id, String password) {
         Optional<Scheduler> existingScheduler = schedulerRepository.findSchedulerById(id);
         if (existingScheduler.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
         }
         if (!existingScheduler.get().getPassword().equals(password)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
@@ -74,7 +88,13 @@ public class SchedulerServiceImpl implements SchedulerService {
 
         int deleteRow = schedulerRepository.deleteScheduler(id);
         if (deleteRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
         }
     }
+
+    @Override
+    public int countAllSchedulers() {
+        return schedulerRepository.countAllSchedulers();
+    }
 }
+
