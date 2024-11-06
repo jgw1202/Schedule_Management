@@ -1,6 +1,8 @@
 package com.example.schedule_management.repository;
 
+/*
 import com.example.schedule_management.entity.User;
+
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -21,3 +23,4 @@ public class UserRepositoryImpl implements  UserRepository {
         return user;
     }
 }
+ */
