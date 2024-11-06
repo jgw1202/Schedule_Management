@@ -10,4 +10,6 @@ public interface UserRepository {
     UserResponseDto saveUser(User User);
 
     Optional<User> findUesrById(Long id);
+
+    int updateUser(Long id, String name, String email);
 }

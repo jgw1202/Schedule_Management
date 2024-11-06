@@ -1,5 +1,6 @@
 package com.example.schedule_management.controller;
 
+import com.example.schedule_management.dto.SchedulerRequestDto;
 import com.example.schedule_management.dto.SchedulerResponseDto;
 import com.example.schedule_management.dto.UserRequestDto;
 import com.example.schedule_management.dto.UserResponseDto;
@@ -17,15 +18,22 @@ public class UserController {
 
     private final UserService userService;
 
+    // 유저 등록
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto dto) {
         return new ResponseEntity<>(userService.saveUser(dto), HttpStatus.CREATED);
     }
 
-    // 일정 조회
+    // 유저 조회
     @GetMapping("{id}")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         return new ResponseEntity<>(userService.findUserById(id), HttpStatus.OK);
+    }
+
+    // 유저 수정
+    @PutMapping("{id}")
+    public ResponseEntity<UserResponseDto> updateScheduler(@PathVariable Long id, @RequestBody UserRequestDto dto) {
+        return new ResponseEntity<>(userService.updateUser(id, dto.getName(), dto.getEmail()), HttpStatus.OK);
     }
 
 }

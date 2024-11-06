@@ -46,6 +46,11 @@ public class JdbcTemplateUserRepository implements UserRepository {
         return result.stream().findAny();
     }
 
+    @Override
+    public int updateUser(Long id, String name, String email) {
+        return jdbcTemplate.update("update user set name = ?, email = ?, updated_at = NOW() where id = ?", name, email, id);
+    }
+
     private RowMapper<User> userRowMapper() {
         return new RowMapper<User>() {
             @Override
