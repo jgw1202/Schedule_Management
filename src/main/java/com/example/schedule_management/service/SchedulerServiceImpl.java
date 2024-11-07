@@ -3,6 +3,8 @@ package com.example.schedule_management.service;
 import com.example.schedule_management.dto.SchedulerRequestDto;
 import com.example.schedule_management.dto.SchedulerResponseDto;
 import com.example.schedule_management.entity.Scheduler;
+import com.example.schedule_management.exception.ResourceNotFoundException;
+import com.example.schedule_management.exception.UnauthorizedException;
 import com.example.schedule_management.repository.SchedulerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,15 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     public SchedulerResponseDto findSchedulerById(Long id) {
-        Optional<Scheduler> scheduler = schedulerRepository.findSchedulerById(id);
-        if (scheduler.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
-        }
-        Scheduler foundScheduler = scheduler.get();
+        Scheduler scheduler = schedulerRepository.findSchedulerById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Scheduler not found with id = " + id));
+
         return new SchedulerResponseDto(
-                foundScheduler.getId(),
-                foundScheduler.getUserName(),
-                foundScheduler.getContents(),
-                foundScheduler.getCreatedAt(),
-                foundScheduler.getUpdatedAt()
+                scheduler.getId(),
+                scheduler.getUserName(),
+                scheduler.getContents(),
+                scheduler.getCreatedAt(),
+                scheduler.getUpdatedAt()
         );
     }
 
@@ -54,12 +54,11 @@ public class SchedulerServiceImpl implements SchedulerService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The title and content are required values.");
         }
 
-        Optional<Scheduler> existingScheduler = schedulerRepository.findSchedulerById(id);
-        if (existingScheduler.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
-        }
-        if (!existingScheduler.get().getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+        Scheduler existingScheduler = schedulerRepository.findSchedulerById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Scheduler not found with id = " + id));
+
+        if (!existingScheduler.getPassword().equals(password)) {
+            throw new UnauthorizedException("Password does not match.");
         }
 
         int updatedRow = schedulerRepository.updateScheduler(id, userName, contents);
@@ -68,27 +67,26 @@ public class SchedulerServiceImpl implements SchedulerService {
         }
 
         return new SchedulerResponseDto(
-                existingScheduler.get().getId(),
+                existingScheduler.getId(),
                 userName,
                 contents,
-                existingScheduler.get().getCreatedAt(),
+                existingScheduler.getCreatedAt(),
                 new Date()  // updatedAt 갱신
         );
     }
 
     @Override
     public void deleteScheduler(Long id, String password) {
-        Optional<Scheduler> existingScheduler = schedulerRepository.findSchedulerById(id);
-        if (existingScheduler.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
-        }
-        if (!existingScheduler.get().getPassword().equals(password)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Password does not match.");
+        Scheduler existingScheduler = schedulerRepository.findSchedulerById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Scheduler not found with id = " + id));
+
+        if (!existingScheduler.getPassword().equals(password)) {
+            throw new UnauthorizedException("Password does not match.");
         }
 
         int deleteRow = schedulerRepository.deleteScheduler(id);
         if (deleteRow == 0) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Scheduler not found with id = " + id);
+            throw new ResourceNotFoundException("Scheduler not found with id = " + id);
         }
     }
 
@@ -97,4 +95,5 @@ public class SchedulerServiceImpl implements SchedulerService {
         return schedulerRepository.countAllSchedulers();
     }
 }
+
 

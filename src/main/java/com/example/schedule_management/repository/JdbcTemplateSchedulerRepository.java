@@ -9,8 +9,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +41,7 @@ public class JdbcTemplateSchedulerRepository implements SchedulerRepository {
     @Override
     public List<SchedulerResponseDto> findAllSchedulers(int page, int size) {
         int offset = (page - 1) * size;
-        String query = "SELECT * FROM scheduler ORDER BY id DESC LIMIT ? OFFSET ?";
+        String query = "SELECT * FROM scheduler ORDER BY updated_at DESC LIMIT ? OFFSET ?";
         return jdbcTemplate.query(query, schedulerRowMapper(), size, offset);
     }
 

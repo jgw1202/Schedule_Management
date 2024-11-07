@@ -57,3 +57,4 @@ public class SchedulerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
+
